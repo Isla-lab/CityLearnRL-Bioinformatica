@@ -115,7 +115,7 @@ Questo glossario raccoglie i principali acronimi e termini tecnici utilizzati al
 
 ---
 
-# CALLBACK DA REPO ORIGINALE CITYLEARN 💻 Requisiti Software
+# 💻 Requisiti Software
 
 Questa sezione installa e importa i pacchetti software che verranno utilizzati nel resto del tutorial. Iniziamo verificando la versione di Python dell’ambiente corrente.  
 CityLearn e le sue dipendenze funzionano correttamente con **Python >= 3.7.x**.
