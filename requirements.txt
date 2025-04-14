@@ -1,3 +1,7 @@
+citylearn
+stable-baselines3
+matplotlib
+
 doe_xstock>=1.1.0
 gymnasium
 nrel-pysam
