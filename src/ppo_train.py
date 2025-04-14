@@ -12,7 +12,7 @@ def train_and_save(seed=0, timesteps=100_000):
     save_rewards(env.envs[0].episode_returns, f"results/ppo/rewards_seed_{seed}.npy")
     env.close()
 
-# Se vuoi, puoi lasciare questo per eseguire singolarmente
+
 if __name__ == "__main__":
     train_and_save(seed=0, timesteps=100_000)
 
