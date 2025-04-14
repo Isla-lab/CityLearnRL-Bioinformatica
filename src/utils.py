@@ -1,11 +1,22 @@
-importa numpy as np
+import gym
+from gym.wrappers import FlattenObservation
 import matplotlib.pyplot as plt
 from citylearn.citylearn import CityLearnEnv
+import numpy as np
 
-def make_env(seed):
-  env = CityLearnEnv(schema="citylearn_challenge_2022_phase_1")
-  env.seed(seed)
-  return env
+from src.wrappers import SingleBuildingWrapper
+
+def make_env(seed=0):
+    env = CityLearnEnv(
+        schema='citylearn_challenge_2022_phase_1',
+        building_ids=['Building_1']
+    )
+    env = SingleBuildingWrapper(env)
+    env.reset(seed=seed)
+    return env
+
+
+
 
 def evaluate_model(model, env, algo_name, seed):
   obs = env.reset()

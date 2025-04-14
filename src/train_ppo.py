@@ -1,5 +1,8 @@
 from stable_baselines3 import PPO
-from citylearn.citylearn impost CityLearnEnv
+from citylearn.citylearn import CityLearnEnv
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.utils import make_env, evaluate_model
 
 def main(seed=0):
