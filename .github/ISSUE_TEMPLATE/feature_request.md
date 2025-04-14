@@ -5,7 +5,6 @@ about: Suggerisci una nuova funzionalità o un miglioramento al progetto
 title: "[FEATURE] Breve descrizione"
 labels: enhancement
 assignees: ''
-
 ---
 
 ## ✨ Descrizione della funzionalità richiesta
