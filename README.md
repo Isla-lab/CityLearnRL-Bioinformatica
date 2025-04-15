@@ -65,16 +65,25 @@ La struttura del progetto è la seguente **(IN AGGIORNAMENTO)**
 
 Per eseguire i notebook è necessario installare i seguenti pacchetti:
 
-- `Python 3.8+`
+- `citylearn`
 - `stable-baselines3`
-- ` `
-- `numpy`
-- `citylearn` *(versione compatibile con la versione di Python utilizzata)*
+- `matplotlib`
+- `doe_xstock>=1.1.0`
+- `gymnasium`
+- `nrel-pysam`
+- `numpy<2.0.0`
+- `pandas`
+- `pyyaml`
+- `scikit-learn<=1.2.2`
+- `simplejson`
+- `torch`
+- `torchvision`
+- `openstudio<=3.3.0`
 
-Puoi installarli tramite pip:
+Puoi installarli tramite pip dalla root della repo:
 
 ```bash
-pip install stable-baselines3 matplotlib numpy citylearn
+pip install -r requirements.txt
 ```
 
 
