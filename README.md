@@ -136,13 +136,42 @@ Questo glossario é pensato per facilitare la comprensione dei concetti legati a
 
 ---
 
-# 💻 Tutorial sul training
+# 💻 Tutorial sul training e sul plotting dei risultati
 
 Assicurarsi di essere posizionati nella root e, possibilmente, con ambiente **Conda** attivo per facilitare l'installazione e l'uso dei pacchetti.
 
-Installare i pacchetti necessari tramite pip:
+1. Installare i pacchetti necessari tramite pip:
 
 ```bash
 pip install -r requirements.txt
 ```
+
+2. Assicurarsi che in data/ sia presente una directory contenente lo **schema.json** e i vari .csv degli edifici da analizzare, oltre ai dataset **weather.csv** e **carbon_intensity.csv**
+
+3. Spostarsi in src/
+
+```bash
+cd src/
+```
+
+4. Eseguire lo script **ppo_train.py** da terminale. Il completamento dello script puó essere lungo o breve a seconda dei total_episodes (puó essere sistemato in fase di tuning con la modifica degli stessi e di altri parametri)
+
+```bash
+python3 ppo_train.py
+```
+
+Sul terminale a questo punto, appaiono in sequenza box contenenti i risultati degli addestramenti per episodio, nonché una verifica che il singolo episodio sia completato correttamente e venga salvato in **results/**.
+
+5. Terminato il training, si possono visualizzare a terminale le sequenze di dati e, tramite funzione **plot_rewards.py**, é possibile visualizzare un plot a schermo dell'andamento reward/episodio
+
+```bash
+python3 plot_rewards.py
+```
+
+6. Infine, nella dir presente in root **results/ppo/** sono presenti X file .zip e X file .npy contenenti i dati di reward per ogni training. In caso di multiple_seed_training && plotting, é presente anche **rewards_plot.png** (da implementare anche nel singolo seed) con smoothing e shadows.
+
+
+
+
+
 
