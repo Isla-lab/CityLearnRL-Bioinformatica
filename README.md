@@ -37,14 +37,25 @@ Tesi di Laurea Triennale in **Bioinformatica** presso il **Dipartimento di Infor
 
 La struttura del progetto è la seguente **(IN AGGIORNAMENTO)**
 
-- `tutorial.ipynb`           : Notebook originale dal repository CityLearn (SAC)
-- `tutorial_ppo.ipynb`       : Implementazione dell'algoritmo PPO
-- `tutorial_td3.ipynb`       : Implementazione dell'algoritmo TD3
+- `tools/`                   : Contiene il notebook originale dal repository CityLearn (SAC)
+- `src/`                     : dir contenente il codice sorgente
+  - `sac_train.py`           : IN AGGIORNAMENTO
+  - `ppo_train.py`           : PPO
+  - `td3_train.py`           : IN AGGIORNAMENTO
+  - `utils.py`               : utils for python RL
+  - `wrappers.py`            : wrappers for python RL
+  - `plot_rewards.py`        : matplotlib plotting single-seed
+  - `train_multiple_rewards.py`    : training for multiple rewards
+  - `plot_multiple_rewards.py`     : plotting for multiple rewards
+- `notebooks/`               : Implementazione dell'algoritmo TD3
 - `results/`                 : Risultati sperimentali (grafici, metriche, log)
-  - `seed_1/`                : Risultati con seed 1
-  - `seed_2/`                : Risultati con seed 2
-  - `...`                    : Altri seed, se presenti
+  - `ppo/`                   : Results for PPO
+  - `td3/`                   : Results for TD3
+  - `sac/`                   : Results for SAC
+- `data/`                    : Data for citylearn_challenge_2021 (schema.json && BuildingX data)
 - `README.md`                : Documentazione del progetto
+- `LICENSE`                  : MIT License for project
+- `requirements.txt`         : bash pip install -r requirements.txt for software requirements in conda
 
 
 
@@ -56,7 +67,7 @@ Per eseguire i notebook è necessario installare i seguenti pacchetti:
 
 - `Python 3.8+`
 - `stable-baselines3`
-- `matplotlib`
+- ` `
 - `numpy`
 - `citylearn` *(versione compatibile con la versione di Python utilizzata)*
 
