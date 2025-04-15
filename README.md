@@ -103,7 +103,8 @@ Per maggiori informazioni sul progetto e per eseguire il codice di base, visita 
 
 # 📘 Glossario
 
-Questo glossario raccoglie i principali acronimi e termini tecnici utilizzati all'interno di questo repository. È pensato per facilitare la comprensione dei concetti legati ai sistemi energetici, agli edifici intelligenti e alle tecnologie di controllo.  
+Si fornisce di seguito il glossario presente in **tutorial.ipynb** nella repo originale, al fine di comprendere appieno i termini abbreviati e gli acronimi.
+Questo glossario é pensato per facilitare la comprensione dei concetti legati ai sistemi energetici, agli edifici intelligenti e alle tecnologie di controllo.  
 
 ---
 
