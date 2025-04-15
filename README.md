@@ -138,3 +138,11 @@ Questo glossario é pensato per facilitare la comprensione dei concetti legati a
 
 # 💻 Tutorial sul training
 
+Assicurarsi di essere posizionati nella root e, possibilmente, con ambiente **Conda** attivo per facilitare l'installazione e l'uso dei pacchetti.
+
+Installare i pacchetti necessari tramite pip:
+
+```bash
+pip install -r requirements.txt
+```
+
