@@ -33,32 +33,6 @@ Bachelor’s Thesis in **Bioinformatics** at the **Department of Computer Scienc
 
 
 
-## 📁 Repo Structure
-
-La struttura del progetto è la seguente **(IN AGGIORNAMENTO)**
-
-- `tools/`                   : Contiene il notebook originale dal repository CityLearn (SAC)
-- `src/`                     : dir contenente il codice sorgente
-  - `sac_train.py`           : IN AGGIORNAMENTO
-  - `ppo_train.py`           : PPO
-  - `td3_train.py`           : IN AGGIORNAMENTO
-  - `utils.py`               : utils for python RL
-  - `wrappers.py`            : wrappers for python RL
-  - `plot_rewards.py`        : matplotlib plotting single-seed
-  - `train_multiple_rewards.py`    : training for multiple rewards
-  - `plot_multiple_rewards.py`     : plotting for multiple rewards
-- `notebooks/`               : Implementazione dell'algoritmo TD3
-- `results/`                 : Risultati sperimentali (grafici, metriche, log)
-  - `ppo/`                   : Results for PPO
-  - `td3/`                   : Results for TD3
-  - `sac/`                   : Results for SAC
-- `data/`                    : Data for citylearn_challenge_2021 (schema.json && BuildingX data)
-- `README.md`                : Documentazione del progetto
-- `LICENSE`                  : MIT License for project
-- `requirements.txt`         : bash pip install -r requirements.txt for software requirements in conda
-
-
-
 ## 🌐 Original Repo Links
 
 The **CityLearn project** is an open-source simulator for urban energy optimization. You can find the original repository at the following [GitHub link](https://github.com/CityLearn/CityLearn).
