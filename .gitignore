@@ -1,2 +1,5 @@
 #OS junk files
 *.DS_Store
+
+#notebook checkpoints
+.ipynb_checkpoints
