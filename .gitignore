@@ -2,4 +2,5 @@
 *.DS_Store
 
 #notebook checkpoints
-*.ipynb_checkpoints
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
