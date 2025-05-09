@@ -32,7 +32,6 @@ Bachelor’s Thesis in **Bioinformatics** at the **Department of Computer Scienc
 ---
 
 
-
 ## 🌐 Original Repo Links
 
 The **CityLearn project** is an open-source simulator for urban energy optimization. You can find the original repository at the following [GitHub link](https://github.com/CityLearn/CityLearn).
@@ -42,6 +41,17 @@ For more information about the project and to run the base code, visit the offic
 - [CityLearn GitHub Repository](https://github.com/CityLearn/CityLearn)
 
 ---
+
+# Installation
+
+Install needed requirements by **requirements.txt** on root:
+
+```python
+pip install -r requirements.txt
+```
+
+---
+
 
 # 📘 Glossary
 
