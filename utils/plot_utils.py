@@ -12,7 +12,7 @@ def plot_single(path_csv, algo_name, output_dir, smoothing_window=25):
 
     plt.figure(figsize=(10, 5))
     plt.plot(episodes, rewards, alpha=0.3, label="Raw Reward")
-    plt.plot(episodes, smoothed, color='blue', linewidth=2, label=f"Smoothed Mean ({smoothing_window})")
+    plt.plot(episodes, smoothed, color='blue', linewidth=2, label=f"Smoothed Mean with smoothing window:({smoothing_window})")
     plt.xlabel("Episode")
     plt.ylabel("Reward")
     plt.title(f"{algo_name} – Training Reward Over Episodes")

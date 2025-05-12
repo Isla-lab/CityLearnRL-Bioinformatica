@@ -14,4 +14,4 @@ python3 -c "from utils.plot_utils import plot_combined; \
 plot_combined(['notebooks/results/log_PPO.csv', 'notebooks/results/log_TD3.csv'], \
 ['PPO', 'TD3'], 'notebooks/combined_plot')"
 
-echo "✅ Plot generation successful and located in -dir 'results/'"
+echo "✅ Plot generation successful and located in -dir 'notebooks/results/'"
