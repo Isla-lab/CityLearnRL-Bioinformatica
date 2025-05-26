@@ -104,7 +104,7 @@ The raw CSV data backing these results is available in the `notebooks/results/` 
 
 ## Project Status
 
-Status: **Completed**. This project was developed as part of a Bachelor's Thesis and is now feature-complete. It may receive occasional maintenance for compatibility or bug fixes.
+Status: **Work in Progress**. This project was developed as part of a Bachelor's Thesis and is now work-in-progress. It may receive occasional maintenance for compatibility or bug fixes.
 
 ---
 
@@ -132,29 +132,10 @@ Bachelor’s Thesis in **Bioinformatics** at the **Department of Computer Scienc
 
 ## Acknowledgements
 
-This project builds upon the excellent CityLearn environment and the original SAC tutorial provided by the CityLearn developers. We acknowledge their foundational work which made this research possible.
-Special thanks to [Mention any specific individuals, supervisors, or institutions if applicable - placeholder for the author to fill in if needed].
+This project builds upon the CityLearn environment and the original SAC tutorial provided by the CityLearn developers. I acknowledge their foundational work which made this research possible.
 
 ---
 
-## Citation
-
-If you use this code or find the results useful in your research, please consider citing this project. As this was a Bachelor's Thesis, please cite as follows (or adapt as needed):
-
-Parretti, J. (Year of Thesis). *Advanced Reinforcement Learning Algorithms for Urban Energy Optimization using CityLearn*. Bachelor's Thesis, Department of Computer Science, University of Verona.
-
-A more formal BibTeX entry can be provided if the thesis is officially published or archived online:
-```bibtex
-@mastersthesis{Parretti_Thesis_Year,
-  author    = {Jacopo Parretti},
-  title     = {Advanced Reinforcement Learning Algorithms for Urban Energy Optimization using CityLearn},
-  school    = {Department of Computer Science, University of Verona},
-  year      = {YYYY} % TODO: Author to fill in Year
-}
-```
-Please replace `YYYY` with the actual year of completion.
-
----
 
 ## Glossary
 
@@ -186,7 +167,7 @@ Please replace `YYYY` with the actual year of completion.
 
 ## Technical Compatibility
 
-For detailed information on package versions (Python, Gym, Stable-Baselines3, CityLearn), compatibility challenges, and specific steps required to align with older Gym/SB3 releases for reproducing the original tutorial environment, please see our dedicated **[Compatibility Guide](COMPATIBILITY_GUIDE.md)**.
+For detailed information on package versions (Python, Gym, Stable-Baselines3, CityLearn), compatibility challenges, and specific steps required to align with older Gym/SB3 releases for reproducing the original tutorial environment, please see dedicated **[Compatibility Guide](COMPATIBILITY_GUIDE.md)**.
 
 This guide covers:
 *   Original and target versions for Python, Gym, and Stable-Baselines3.
