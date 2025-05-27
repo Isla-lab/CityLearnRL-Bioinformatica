@@ -1,0 +1,88 @@
+# train_td3.py
+import os
+import torch
+import numpy as np
+import pandas as pd
+from stable_baselines3 import TD3
+from stable_baselines3.common.noise import NormalActionNoise
+from citylearn.citylearn import CityLearnEnv
+from citylearn.wrappers import NormalizedObservationWrapper, StableBaselines3Wrapper
+from custom_reward import CustomReward  # Assuming you have this in a separate file
+
+def train_td3(seed=0, episodes=1000, save_dir='results'):
+    # Set random seeds for reproducibility
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    random.seed(seed)
+    
+    # Create save directories
+    os.makedirs(save_dir, exist_ok=True)
+    os.makedirs(os.path.join(save_dir, 'models'), exist_ok=True)
+    os.makedirs(os.path.join(save_dir, 'results'), exist_ok=True)
+    
+    # Initialize environment
+    env = CityLearnEnv(schema)
+    env.reward_function = CustomReward(env.get_metadata())
+    env = NormalizedObservationWrapper(env)
+    env = StableBaselines3Wrapper(env)
+    
+    # Setup action noise
+    n_actions = env.action_space.shape[-1]
+    action_noise = NormalActionNoise(
+        mean=np.zeros(n_actions),
+        sigma=0.1 * np.ones(n_actions)
+    )
+    
+    # Calculate total timesteps
+    episode_timesteps = env.time_steps - 1
+    total_timesteps = episodes * episode_timesteps
+    
+    # Initialize TD3 model
+    model = TD3(
+        policy='MlpPolicy',
+        env=env,
+        seed=seed,
+        learning_rate=1e-3,
+        buffer_size=50_000,
+        batch_size=128,
+        tau=0.001,
+        gamma=0.99,
+        train_freq=(1, 'step'),
+        gradient_steps=1,
+        learning_starts=1000,
+        policy_delay=2,
+        target_policy_noise=0.2,
+        target_noise_clip=0.3,
+        action_noise=action_noise,
+        verbose=1,
+        device='auto',
+        policy_kwargs=dict(
+            net_arch=dict(pi=[256, 256], qf=[256, 256]),
+            activation_fn=torch.nn.ReLU,
+            n_critics=2
+        )
+    )
+    
+    # Train the model
+    print(f"Starting TD3 training with seed {seed} for {episodes} episodes")
+    model.learn(total_timesteps=total_timesteps)
+    
+    # Save the model and results
+    model_path = os.path.join(save_dir, 'models', f'td3_seed{seed}')
+    results_path = os.path.join(save_dir, 'results', f'td3_rewards_seed{seed}.csv')
+    
+    model.save(model_path)
+    rewards = pd.Series(env.get_attr('reward_history', [0])[0])
+    rewards.to_csv(results_path, index=False)
+    
+    print(f"Training completed for seed {seed}. Model and results saved.")
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--seed', type=int, default=0, help='Random seed')
+    parser.add_argument('--episodes', type=int, default=1000, help='Number of episodes')
+    parser.add_argument('--save-dir', type=str, default='results', help='Directory to save results')
+    args = parser.parse_args()
+    
+    train_td3(seed=args.seed, episodes=args.episodes, save_dir=args.save_dir)
