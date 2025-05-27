@@ -81,11 +81,11 @@ Then, navigate to the `notebooks/models/` directory in the Jupyter interface and
 Then, open the desired notebook and execute the cells.
 
 **Generating Plots:**
-Visualizations from saved results (e.g., CSV files in `notebooks/results/`) can be generated using analysis scripts. If a `generate_plots.sh` script is provided or created, it would typically be run as:
+Visualizations from saved results (e.g., CSV files in `notebooks/results/`) can be generated using the analysis script:
 ```bash
-bash generate_plots.sh
+bash scripts/generate_plots.sh
 ```
-This script would process data from `notebooks/results/` and save plots, for example, into `notebooks/combined_plot/`.
+This script processes data from `notebooks/results/` and saves plots in `notebooks/plots/`.
 
 **Models and Results:**
 *   **Saved Models:** Trained RL models are stored in `notebooks/models/` (e.g., `ppo_model_seed0.zip`).
