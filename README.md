@@ -14,13 +14,16 @@ This project explores the application of advanced Reinforcement Learning (RL) al
 *   [Usage](#usage)
 *   [Results](#results)
 *   [Project Status](#project-status)
-*   [Contributing](#contributing)
+*   [Documentation](#documentation)
+    *   [Contributing Guidelines](#contributing-guidelines)
+    *   [Code of Conduct](#code-of-conduct)
+    *   [Setup Instructions](#setup-instructions)
+    *   [Technical Compatibility](#technical-compatibility)
 *   [License](#license)
 *   [Author](#author)
 *   [Acknowledgements](#acknowledgements)
 *   [Citation](#citation)
 *   [Glossary](#glossary)
-*   [Technical Compatibility](#technical-compatibility)
 
 ---
 
@@ -108,9 +111,18 @@ Status: **Work in Progress**. This project was developed as part of a Bachelor's
 
 ---
 
+## Documentation
+
+For more detailed information about the project, please check the documentation in the [docs](docs/) directory:
+
+*   [Contributing Guidelines](docs/CONTRIBUTING.md)
+*   [Code of Conduct](docs/CODE_OF_CONDUCT.md)
+*   [Setup Instructions](docs/SETUP.md)
+*   [Technical Compatibility](docs/COMPATIBILITY_GUIDE.md)
+
 ## Contributing
 
-Contributions are welcome! Please feel free to open an issue to report bugs, suggest improvements, or discuss new ideas. If you plan to make significant changes, please open an issue first to discuss what you would like to change. Pull requests are appreciated.
+Contributions are welcome! Please follow our [Contributing Guidelines](docs/CONTRIBUTING.md) and review our [Code of Conduct](docs/CODE_OF_CONDUCT.md) before submitting any contributions.
 
 ---
 
@@ -167,7 +179,7 @@ This project builds upon the CityLearn environment and the original SAC tutorial
 
 ## Technical Compatibility
 
-For detailed information on package versions (Python, Gym, Stable-Baselines3, CityLearn), compatibility challenges, and specific steps required to align with older Gym/SB3 releases for reproducing the original tutorial environment, please see dedicated **[Compatibility Guide](COMPATIBILITY_GUIDE.md)**.
+For detailed information on package versions (Python, Gym, Stable-Baselines3, CityLearn), compatibility challenges, and specific steps required to align with older Gym/SB3 releases for reproducing the original tutorial environment, please see the [Technical Compatibility Guide](docs/COMPATIBILITY_GUIDE.md) in the documentation.
 
 This guide covers:
 *   Original and target versions for Python, Gym, and Stable-Baselines3.
