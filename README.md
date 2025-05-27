@@ -70,11 +70,11 @@ This project primarily uses Jupyter Notebooks for RL algorithm implementation an
 **Running the Notebooks:**
 *   `notebooks/tutorial.ipynb`: This is the original CityLearn tutorial notebook focusing on the SAC algorithm.
 *   `notebooks/PPO_TD3_tutorial.ipynb`: This notebook contains the implementations and comparative analysis of PPO and TD3 algorithms, alongside SAC.
-To run these, navigate to the `notebooks/` directory and start Jupyter Lab:
+To run these, start Jupyter Lab from the root directory:
 ```bash
-cd notebooks
 jupyter lab
 ```
+Then, navigate to the `notebooks/models/` directory in the Jupyter interface and open the desired notebook.
 Then, open the desired notebook and execute the cells.
 
 **Generating Plots:**
@@ -86,8 +86,8 @@ This script would process data from `notebooks/results/` and save plots, for exa
 
 **Models and Results:**
 *   **Saved Models:** Trained RL models are stored in `notebooks/models/` (e.g., `ppo_model_seed0.zip`).
-*   **Raw Results:** CSV files containing logs and rewards data are typically saved in `notebooks/results/` (e.g., `log_PPO.csv`, `ppo_rewards_seed0.csv`).
-*   **Plots:** Visualizations are found in `notebooks/results/plot_PPO/`, `notebooks/results/plot_TD3/`, and `notebooks/combined_plot/`.
+*   **Raw Results:** CSV files containing logs and rewards data are saved in `notebooks/results/` (e.g., `log_PPO.csv`, `ppo_rewards_seed0.csv`).
+*   **Plots:** Visualizations are found in `notebooks/plots/` (e.g., `combined_plot.png`, `PPO_reward_plot.png`, `TD3_reward_plot.png`).
 
 ---
 

@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "citylearn-rl"
+version = "0.1.0"
+description = "Reinforcement Learning for CityLearn"
+authors = [
+    { name="Djacoo", email="" }
+]
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/djacoo/CityLearnRL-Bioinformatica"
+"Bug Tracker" = "https://github.com/djacoo/CityLearnRL-Bioinformatica/issues"
+
+[project.scripts]
+"citylearn-rl" = "src.citylearn:main"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test"]
+python_functions = ["test_"]
+addopts = "--cov=src --cov-report=term-missing"
+
+[tool.mypy]
+python_version = 3.8
+strict = true
+ignore_missing_imports = true
