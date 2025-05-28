@@ -7,7 +7,8 @@ from stable_baselines3 import TD3
 from stable_baselines3.common.noise import NormalActionNoise
 from citylearn.citylearn import CityLearnEnv
 from citylearn.wrappers import NormalizedObservationWrapper, StableBaselines3Wrapper
-from custom_reward import CustomReward  # Assuming you have this in a separate file
+# Import custom reward module
+from custom_reward import CustomReward
 
 def train_td3(seed=0, episodes=1000, save_dir='results'):
     # Set random seeds for reproducibility
