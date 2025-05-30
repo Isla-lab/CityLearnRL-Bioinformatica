@@ -156,17 +156,29 @@ with open(os.path.join(log_dir, 'hyperparams.json'), 'w') as f:
 
 # Load environment
 dataset_name = 'citylearn_challenge_2022_phase_all'
+
+# Initialize the CityLearn environment
 env = CityLearnEnv(dataset_name, central_agent=True)
 
-# Wrap environment for Stable Baselines3
-env = StableBaselines3Wrapper(env)
-
 # The noise objects for TD3
-n_actions = env.action_space.shape[-1]
+n_actions = env.action_space[0].shape[0]  # Get number of actions from the first building
+print(f"Number of actions: {n_actions}")
+
 action_noise = NormalActionNoise(
     mean=np.zeros(n_actions), 
     sigma=0.1 * np.ones(n_actions)
 )
+
+# Wrap environment for Stable Baselines3
+env = StableBaselines3Wrapper(env)
+
+# Verify the environment
+print("Environment wrapped successfully")
+print(f"Observation space: {env.observation_space}")
+print(f"Action space: {env.action_space}")
+
+# Create a simple evaluation environment that doesn't use Monitor
+eval_env = StableBaselines3Wrapper(CityLearnEnv(dataset_name, central_agent=True))
 
 # Optimized hyperparameters for better learning
 hyperparams.update({
@@ -264,18 +276,50 @@ class RewardScaler(gym.Wrapper):
 # Apply enhanced reward scaling
 env = RewardScaler(env, scale=0.001, clip=1.0)
 
-# Create evaluation environment
-eval_env = Monitor(env)
+# For CityLearn, we'll use a custom evaluation function instead of EvalCallback
+# since the environment doesn't work well with the default Monitor wrapper
+class CityLearnEvalCallback(BaseCallback):
+    """
+    A custom callback that evaluates the model periodically.
+    """
+    def __init__(self, eval_env, eval_freq=1000, deterministic=True, verbose=0):
+        super(CityLearnEvalCallback, self).__init__(verbose)
+        self.eval_env = eval_env
+        self.eval_freq = eval_freq
+        self.deterministic = deterministic
+        self.best_mean_reward = -np.inf
+        self.best_model_path = os.path.join(log_dir, 'best_model')
+        
+    def _on_step(self) -> bool:
+        if self.eval_freq > 0 and self.n_calls % self.eval_freq == 0:
+            # Run evaluation
+            mean_reward, _, _ = evaluate_model(
+                self.model, 
+                self.eval_env,
+                num_episodes=1,
+                deterministic=self.deterministic
+            )
+            
+            # Save the best model
+            if mean_reward > self.best_mean_reward:
+                self.best_mean_reward = mean_reward
+                self.model.save(self.best_model_path)
+                if self.verbose > 0:
+                    print(f"New best mean reward: {mean_reward:.2f} - Saving best model to {self.best_model_path}")
+            
+            # Log the evaluation results
+            if self.logger is not None:
+                self.logger.record('eval/mean_reward', float(mean_reward))
+                self.logger.dump(self.num_timesteps)
+                
+        return True
 
-# Create the callback
-eval_callback = EvalCallback(
-    eval_env,
-    best_model_save_path=os.path.join(log_dir, 'best_model'),
-    log_path=os.path.join(log_dir, 'evaluations'),
+# Create the evaluation callback
+eval_callback = CityLearnEvalCallback(
+    eval_env=eval_env,
     eval_freq=1000,  # Evaluate every 1000 steps
     deterministic=True,
-    render=False,
-    n_eval_episodes=1
+    verbose=1
 )
 
 # Train the model
@@ -378,6 +422,27 @@ try:
     # Track the last step to update progress properly
     last_step = 0
     
+    # Initialize variables
+    total_training_steps = 50000  # Total number of training steps
+    current_steps = 1000  # Steps per training iteration
+    warmup_steps = 10000  # Number of steps for learning rate warmup
+    save_freq = 10000  # Save model every N steps
+    
+    # Create evaluation callback
+    eval_callback = EvalCallback(
+        eval_env,
+        best_model_save_path=os.path.join(log_dir, 'best_model'),
+        log_path=log_dir,
+        eval_freq=5000,  # Evaluate every 5000 steps
+        deterministic=True,
+        render=False,
+        n_eval_episodes=1,
+    )
+    
+    # Create progress callback
+    progress_callback = ProgressCallback(check_freq=500)  # Log every 500 steps
+    
+    # Training loop
     try:
         while model.num_timesteps < total_training_steps:
             # Calculate steps to train in this iteration (at most 1000 steps)
@@ -394,63 +459,74 @@ try:
             # Update action noise for this phase
             model.action_noise = get_action_noise(model.num_timesteps, total_training_steps)
             
+            # Apply learning rate schedule
+            if model.num_timesteps < warmup_steps:
+                # Linear warmup
+                lr_scale = model.num_timesteps / warmup_steps
+                current_lr = hyperparams['learning_rate'] * lr_scale
+            else:
+                # Keep constant learning rate after warmup
+                current_lr = hyperparams['learning_rate']
+            
+            # Apply learning rate to both actor and critic
+            for param_group in model.actor.optimizer.param_groups + model.critic.optimizer.param_groups:
+                param_group['lr'] = current_lr
+            
+            # Print progress
+            if model.num_timesteps % 1000 == 0:
+                print(f"Step {model.num_timesteps}: Learning rate = {current_lr:.2e}")
+            
+            print(f"\nTraining steps {model.num_timesteps} to {model.num_timesteps + current_steps} (of {total_training_steps})")
+            
+            # Train with callbacks
+            model.learn(
+                total_timesteps=current_steps,
+                log_interval=1000,  # Less frequent logging to reduce I/O
+                progress_bar=True,
+                tb_log_name="td3_citylearn",
+                reset_num_timesteps=False,
+                callback=[eval_callback, progress_callback]
+            )
+            
+            # Save intermediate models
+            if (model.num_timesteps % save_freq) < current_steps:  # Check if save_freq is within this batch
+                model_path = os.path.join(log_dir, f'model_step_{model.num_timesteps}')
+                model.save(model_path)
+                print(f"Model saved to {model_path}")
+            
             # Update progress bar
             pbar.update(model.num_timesteps - last_step)
             last_step = model.num_timesteps
             
-            # Train for current_steps
-            model.learn(
-                total_timesteps=current_steps,
-                log_interval=100,
-                progress_bar=False,  # We're using our own progress bar
-                callback=[eval_callback, progress_callback],
-                reset_num_timesteps=False
-            )
-            
-            # Update progress bar to current timestep
-            pbar.n = model.num_timesteps
-            pbar.refresh()
-            
     except KeyboardInterrupt:
         print("\nTraining interrupted by user.")
+    except Exception as e:
+        print(f"\nError during training: {e}")
+        # Save the model on error
+        model_path = os.path.join(log_dir, f'model_error_step_{model.num_timesteps}')
+        model.save(model_path)
+        print(f"Model saved to {model_path} after error")
+        raise  # Re-raise the exception after handling
     finally:
         pbar.close()
         
-        # Simpler learning rate schedule
-        if step < warmup_steps:
-            # Linear warmup
-            lr_scale = step / warmup_steps
-            current_lr = hyperparams['learning_rate'] * lr_scale
-        else:
-            # Keep constant learning rate after warmup
-            current_lr = hyperparams['learning_rate']
-            
-        # Apply learning rate to both actor and critic
-        for param_group in model.actor.optimizer.param_groups + model.critic.optimizer.param_groups:
-            param_group['lr'] = current_lr
-            
-        # Print learning rate every 1000 steps
-        if step % 1000 == 0:
-            print(f"Step {step}: Learning rate = {current_lr:.2e}")
+        # Save the final model
+        model.save(os.path.join(log_dir, 'final_model'))
+        print(f"\nFinal model saved to {os.path.join(log_dir, 'final_model')}")
         
-        print(f"\nTraining steps {step} to {step + current_steps} (of {total_training_steps})")
-        print(f"Current learning rate: {model.actor.optimizer.param_groups[0]['lr']:.2e}")
+        # Save training time
+        training_time = time.time() - start_time
+        print(f"\nTotal training time: {training_time:.2f} seconds")
         
-        # Create progress callback
-        progress_callback = ProgressCallback(check_freq=500)  # Log every 500 steps
+        # Save training metrics
+        metrics = {
+            'total_training_steps': model.num_timesteps,
+            'training_time_seconds': training_time,
+            'final_learning_rate': current_lr if 'current_lr' in locals() else hyperparams['learning_rate']
+        }
         
-        # Train with callbacks
-        model.learn(
-            total_timesteps=current_steps,
-            log_interval=1000,  # Less frequent logging to reduce I/O
-            progress_bar=True,
-            tb_log_name="td3_citylearn",
-            reset_num_timesteps=(step == 0),  # Only reset on first iteration
-            callback=[eval_callback, progress_callback],
-        )
-        
-        # Save intermediate models less frequently
-        if (step + 1) % save_freq == 0:
+        with open(os.path.join(log_dir, 'training_metrics.json'), 'w') as f:
+            json.dump(metrics, f, indent=4)
             model_path = os.path.join(log_dir, f'model_step_{step + current_steps}')
             model.save(model_path)
             print(f"Model saved to {model_path}")

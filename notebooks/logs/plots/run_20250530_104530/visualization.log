@@ -1,0 +1,86 @@
+Loading TensorBoard logs from: /Users/jacopo/Desktop/CityLearnRL-Bioinformatica/notebooks/logs/ppo_test/ppo_citylearn_3/events.out.tfevents.1748593079.MacBookPro.home-life.hub.1741.0
+
+Available metrics:
+- time/fps
+- train/approx_kl
+- train/clip_fraction
+- train/clip_range
+- train/entropy_loss
+- train/explained_variance
+- train/learning_rate
+- train/loss
+- train/policy_gradient_loss
+- train/std
+- train/value_loss
+
+==================================================
+Plotting metric: train/loss
+==================================================
+
+Plot saved to: /Users/jacopo/Desktop/CityLearnRL-Bioinformatica/notebooks/logs/ppo_test/ppo_citylearn_3/plots/train_loss.png
+
+Statistics:
+Mean: -0.0209
+Max: 0.0426
+Min: -0.0607
+Last 10 average: -0.0181
+
+==================================================
+Plotting metric: train/value_loss
+==================================================
+
+Plot saved to: /Users/jacopo/Desktop/CityLearnRL-Bioinformatica/notebooks/logs/ppo_test/ppo_citylearn_3/plots/train_value_loss.png
+
+Statistics:
+Mean: 0.0354
+Max: 0.5044
+Min: 0.0014
+Last 10 average: 0.0023
+
+==================================================
+Plotting metric: train/explained_variance
+==================================================
+
+Plot saved to: /Users/jacopo/Desktop/CityLearnRL-Bioinformatica/notebooks/logs/ppo_test/ppo_citylearn_3/plots/train_explained_variance.png
+
+Statistics:
+Mean: -0.0556
+Max: 0.0492
+Min: -0.1610
+Last 10 average: -0.0490
+
+==================================================
+Plotting metric: train/entropy_loss
+==================================================
+
+Plot saved to: /Users/jacopo/Desktop/CityLearnRL-Bioinformatica/notebooks/logs/ppo_test/ppo_citylearn_3/plots/train_entropy_loss.png
+
+Statistics:
+Mean: -1.2790
+Max: -1.1406
+Min: -1.4217
+Last 10 average: -1.2063
+
+==================================================
+Plotting metric: train/approx_kl
+==================================================
+
+Plot saved to: /Users/jacopo/Desktop/CityLearnRL-Bioinformatica/notebooks/logs/ppo_test/ppo_citylearn_3/plots/train_approx_kl.png
+
+Statistics:
+Mean: 0.0075
+Max: 0.0186
+Min: 0.0034
+Last 10 average: 0.0048
+
+==================================================
+Plotting metric: train/policy_gradient_loss
+==================================================
+
+Plot saved to: /Users/jacopo/Desktop/CityLearnRL-Bioinformatica/notebooks/logs/ppo_test/ppo_citylearn_3/plots/train_policy_gradient_loss.png
+
+Statistics:
+Mean: -0.0088
+Max: -0.0014
+Min: -0.0208
+Last 10 average: -0.0048
