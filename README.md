@@ -18,10 +18,6 @@ CityLearnRL is an advanced research framework that implements and compares three
 - **Research**: Extensible architecture for testing new RL approaches
 - **Education**: Learn about modern RL applications in energy management
 
-<div align="center">
-  <img src="https://via.placeholder.com/800x400.png?text=CityLearnRL+Demo" alt="CityLearnRL Demo" width="800"/>
-  <p><em>Visualization of energy optimization across multiple buildings</em></p>
-</div>
 
 ## ✨ Key Features
 
@@ -227,8 +223,6 @@ This script processes data from `notebooks/results/` and saves plots in `noteboo
 
 ---
 
-## Results
-
 ## 📈 Results
 
 ### Performance Comparison
@@ -245,10 +239,6 @@ This script processes data from `notebooks/results/` and saves plots in `noteboo
 
 ### 📉 Training Curves
 
-<div align="center">
-  <img src="https://via.placeholder.com/800x400.png?text=Training+Curves" alt="Training Performance" width="800"/>
-  <p><em>Figure 1: Training progress across different algorithms</em></p>
-</div>
 
 ### 🏆 Key Findings
 
@@ -343,13 +333,6 @@ For more detailed information about the project, please check the documentation 
 *   [Setup Instructions](docs/SETUP.md)
 *   [Technical Compatibility](docs/COMPATIBILITY_GUIDE.md)
 
-## Contributing
-
-We welcome contributions from the community! Here's how you can help:
-
-1. **Report bugs** by opening an issue
-2. **Suggest enhancements** via feature requests
-3. **Submit code changes** through pull requests
 
 ### Development Setup
 
@@ -366,17 +349,6 @@ We welcome contributions from the community! Here's how you can help:
    ```
 5. Submit a pull request
 
-### Code Style
-
-- Follow [PEP 8](https://www.python.org/dev/peps/pep-0008/) guidelines
-- Use [Google-style docstrings](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings)
-- Run formatters before committing:
-  ```bash
-  black .
-  isort .
-  ```
-
-Contributions are welcome! Please follow our [Contributing Guidelines](docs/CONTRIBUTING.md) and review our [Code of Conduct](docs/CODE_OF_CONDUCT.md) before submitting any contributions.
 
 ---
 
@@ -389,22 +361,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 1. [Stable Baselines3 Documentation](https://stable-baselines3.readthedocs.io/)
 2. [CityLearn: A Benchmark for Energy Optimization](https://intelligent-environments-lab.github.io/CityLearn/)
 3. [Reinforcement Learning: An Introduction](http://incompleteideas.net/book/RLbook2020.pdf)
-
-## ✨ Contributors
-
-<a href="https://github.com/yourusername/CityLearnRL-Bioinformatica/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=yourusername/CityLearnRL-Bioinformatica" />
-</a>
-
----
-
-<div align="center">
-  Made with ❤️ by [Your Name] | 
-  <a href="https://yourwebsite.com">Website</a> | 
-  <a href="https://twitter.com/yourhandle">Twitter</a>
-</div>
-
-This project is licensed under the **MIT License**. See the `LICENSE` file for details.
 
 ---
 
