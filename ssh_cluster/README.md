@@ -233,16 +233,3 @@ pip install -r requirements.txt --no-deps
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Citation
-If you use this code in your research, please cite:
-```
-@misc{citylearn2023,
-  author = {Your Name},
-  title = {CityLearn TD3 Implementation},
-  year = {2023},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/yourusername/CityLearnRL-Bioinformatica}}
-}
-```
