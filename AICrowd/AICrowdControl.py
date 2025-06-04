@@ -9,8 +9,6 @@ Key Components:
 - PhaseWeights: Dataclass for defining weight distribution across different reward components
 - ControlTrackReward: Main class for calculating and aggregating various KPIs into a final score
 
-Author: [Your Name/Organization]
-Date: [Last Updated]
 """
 
 import numpy as np
