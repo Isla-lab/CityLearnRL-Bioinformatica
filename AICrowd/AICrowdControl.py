@@ -13,12 +13,33 @@ class PhaseWeights:
 PHASE_I = PhaseWeights(w1=0.3, w2=0.1, w3=0.6, w4=0.0)
 PHASE_II = PhaseWeights(w1=0.3, w2=0.1, w3=0.3, w4=0.3)
 
+# Baseline KPIs for reward calculation
+BASELINE_KPIS = {
+    "carbon_emissions": 1.0,
+    "ramping": 1.0,
+    "1-load_factor": 1.0,
+    "daily_peak": 1.0,
+    "all_time_peak": 1.0,
+    "unmet_hours": 1.0,
+    "1-thermal_resilience": 1.0,
+    "normalized_unserved_energy": 1.0,
+}
+
 class ControlTrackReward:
     """Compute Control Track reward following CityLearn Challenge formulas."""
 
-    def __init__(self, baseline: Mapping[str, float], phase: PhaseWeights = PHASE_I):
+    def __init__(self, baseline: Mapping[str, float], phase: dict = None):
         self.baseline = baseline
-        self.phase = phase
+        # Convert phase dict to PhaseWeights if needed
+        if isinstance(phase, dict):
+            self.phase = PhaseWeights(
+                w1=phase.get('w1', 0.3),
+                w2=phase.get('w2', 0.1),
+                w3=phase.get('w3', 0.6),
+                w4=phase.get('w4', 0.0)
+            )
+        else:
+            self.phase = phase or PHASE_I
 
     def carbon_emissions(self, e: np.ndarray, emission_rate: Sequence[float]) -> float:
         """Carbon emissions G.
