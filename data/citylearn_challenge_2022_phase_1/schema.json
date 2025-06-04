@@ -1,0 +1,124 @@
+{
+  "root_directory": "./",
+  "buildings": [
+    {
+      "name": "Building_1",
+      "energy_simulation": "building1.csv",
+      "weather": "weather.csv",
+      "energy_simulation_type": "Building",
+      "carbon_intensity": "carbon_intensity.csv",
+      "pricing": "pricing.csv",
+      "dhw_storage": {
+        "capacity": 100,
+        "initial_soc": 0.5
+      },
+      "cooling_storage": {
+        "capacity": 50,
+        "initial_soc": 0.5
+      },
+      "electrical_storage": {
+        "capacity": 10,
+        "initial_soc": 0.5,
+        "efficiency": 0.9
+      },
+      "pv": {
+        "capacity": 10.0,
+        "tilt": 30,
+        "azimuth": 180
+      }
+    }
+  ],
+  "simulation_start_time_step": 0,
+  "simulation_end_time_step": 8759,
+  "seconds_per_time_step": 3600,
+  "central_agent": true,
+  "episodes": 1,
+  "reward_function": {
+    "type": "custom",
+    "module": "AICrowd.AICrowdControl",
+    "class": "ControlTrackReward",
+    "args": {
+      "baseline_kpis": {
+        "carbon_emissions": 1.0,
+        "ramping": 1.0,
+        "1-load_factor": 1.0,
+        "daily_peak": 1.0,
+        "all_time_peak": 1.0,
+        "unmet_hours": 1.0,
+        "1-thermal_resilience": 1.0,
+        "normalized_unserved_energy": 1.0
+      }
+    }
+  },
+  "action_definition": {
+    "cooling_storage": ["charge_discharge"],
+    "dhw_storage": ["charge_discharge"],
+    "electrical_storage": ["charge_discharge"],
+    "pv": ["solar_power_curtailment"]
+  },
+  "observation_metadata": {
+    "hour": {
+      "type": "int",
+      "lower_bound": 0,
+      "upper_bound": 23
+    },
+    "day_type": {
+      "type": "int",
+      "lower_bound": 0,
+      "upper_bound": 6
+    },
+    "month": {
+      "type": "int",
+      "lower_bound": 1,
+      "upper_bound": 12
+    },
+    "outdoor_dry_bulb_temperature": {
+      "type": "float"
+    },
+    "outdoor_relative_humidity": {
+      "type": "float"
+    },
+    "diffuse_solar_irradiance": {
+      "type": "float"
+    },
+    "direct_solar_irradiance": {
+      "type": "float"
+    },
+    "non_shiftable_load": {
+      "type": "float"
+    },
+    "solar_generation": {
+      "type": "float"
+    },
+    "indoor_dry_bulb_temperature": {
+      "type": "float"
+    },
+    "indoor_relative_humidity": {
+      "type": "float"
+    },
+    "cooling_demand": {
+      "type": "float"
+    },
+    "dhw_demand": {
+      "type": "float"
+    },
+    "cooling_storage_soc": {
+      "type": "float"
+    },
+    "dhw_storage_soc": {
+      "type": "float"
+    },
+    "electrical_storage_soc": {
+      "type": "float"
+    },
+    "net_electricity_consumption": {
+      "type": "float"
+    },
+    "electricity_pricing": {
+      "type": "float"
+    },
+    "carbon_intensity": {
+      "type": "float"
+    }
+  }
+}
