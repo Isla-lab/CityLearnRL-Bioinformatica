@@ -63,81 +63,87 @@ fi
 # Install specific versions of packages from PPO_TD3_tutorial.ipynb
 status "Installing Python packages with specific versions from PPO_TD3_tutorial..."
 
-# First install setuptools and wheel with specific versions
-pip install --no-cache-dir setuptools==65.5.0 "wheel<0.40.0" || error "Failed to install setuptools and wheel"
+# Ensure pip is installed and at the right version
+python -m ensurepip --upgrade
+python -m pip install --upgrade pip==23.3.2
 
-# Install main packages
-pip install --no-cache-dir \
-    gym==0.21.0 \
-    stable-baselines3==1.8.0 \
-    CityLearn==2.1.2 \
-    ipywidgets \
-    matplotlib \
-    seaborn \
-    shimmy \
-    requests \
-    beautifulsoup4 \
-    || error "Failed to install main packages"
+# Install setuptools and wheel with specific versions
+python -m pip install --no-cache-dir setuptools==59.5.0 "wheel<0.40.0"
 
-# Install PyTorch with CPU support (version not specified in the tutorial, using a compatible one)
-pip install --no-cache-dir torch==1.10.0+cpu torchvision==0.11.1+cpu torchaudio==0.10.0 -f https://download.pytorch.org/whl/torch_stable.html \
-    || warning "Failed to install PyTorch with specific version, trying without version constraint"
+# Install core dependencies first
+python -m pip install --no-cache-dir "numpy<1.24.0" "pyyaml>=5.4.1" "pandas>=1.0.0" "tqdm>=4.50.0"
 
-# If PyTorch installation with specific version failed, try without version constraint
-if ! python -c "import torch" &> /dev/null; then
-    pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu \
-        || error "Failed to install PyTorch"
-fi
+# Install gym and its dependencies
+python -m pip install --no-cache-dir "gym==0.21.0" "shimmy>=0.1.0"
 
-# Install system dependencies if available (won't fail if not available)
+# Install stable-baselines3 and CityLearn
+python -m pip install --no-cache-dir "stable-baselines3==1.8.0" "CityLearn==2.1.2"
+
+# Install visualization packages
+python -m pip install --no-cache-dir "matplotlib>=3.3.0" "seaborn>=0.11.0" "ipywidgets>=7.6.0" "Pillow>=9.0.0"
+
+# Install PyTorch with CPU support
+python -m pip install --no-cache-dir torch==1.10.0+cpu torchvision==0.11.1+cpu torchaudio==0.10.0 -f https://download.pytorch.org/whl/torch_stable.html
+
+# Install system dependencies if available (skip if no sudo access)
 if command -v apt-get &> /dev/null; then
     status "Installing system dependencies..."
-    sudo apt-get update && sudo apt-get install -y python3-tk python3-dev graphviz || warning "Failed to install system dependencies"
+    sudo -k apt-get update && sudo apt-get install -y python3-tk python3-dev graphviz 2>/dev/null || warning "Failed to install system dependencies (sudo access required)"
 fi
 
 # Verify installations
 status "Verifying installations..."
 python -c "
 import sys
-import pkg_resources
+import importlib.metadata as metadata
+from importlib import import_module
 
+# Required packages with minimum versions
 required = {
-    'numpy': '1.24.3',
-    'torch': '2.0.1',
+    'numpy': '1.20.0',
+    'torch': '1.10.0',
     'gym': '0.21.0',
     'stable_baselines3': '1.8.0',
-    'citylearn': '2.0.0',
-    'matplotlib': '3.7.1',
-    'Pillow': '10.0.0',
-    'pyparsing': '3.0.9'
+    'citylearn': '2.1.2',
+    'matplotlib': '3.3.0',
+    'Pillow': '9.0.0',
+    'pandas': '1.0.0',
+    'pyyaml': '5.4.1',
+    'tqdm': '4.50.0',
+    'requests': '2.25.0',
+    'beautifulsoup4': '4.9.0',
+    'shimmy': '0.1.0'
 }
 
 success = True
-for pkg, version in required.items():
+for pkg, min_version in required.items():
     try:
-        installed = pkg_resources.get_distribution(pkg).version
-        if installed != version:
-            print(f'Warning: {pkg} version mismatch. Expected {version}, got {installed}')
+        # Try to get the installed version
+        installed_version = metadata.version(pkg)
+        
+        # Compare versions
+        from packaging import version
+        if version.parse(installed_version) < version.parse(min_version):
+            print(f'Warning: {pkg} version {installed_version} is below minimum required {min_version}')
             success = False
-    except pkg_resources.DistributionNotFound:
+        else:
+            print(f'✓ {pkg} {installed_version} >= {min_version}')
+            
+        # Try to import the package
+        import_module(pkg.replace('-', '_'))
+        
+    except metadata.PackageNotFoundError:
         print(f'Error: {pkg} is not installed')
+        success = False
+    except ImportError as e:
+        print(f'Error importing {pkg}: {str(e)}')
         success = False
 
 if success:
-    print('All required packages are installed and versions match!')
-    # Test imports
-    try:
-        import torch
-        import gym
-        import stable_baselines3
-        import citylearn
-        import matplotlib
-        print('All packages imported successfully!')
-    except ImportError as e:
-        print(f'Error during import test: {e}')
-        success = False
-
-if not success:
+    print('\n✅ All required packages are installed and meet version requirements!')
+    print('✅ All packages imported successfully!')
+else:
+    print('\n❌ Some packages failed verification')
     sys.exit(1)
 " || error "Verification failed"
 

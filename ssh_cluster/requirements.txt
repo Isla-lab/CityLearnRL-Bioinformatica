@@ -1,18 +1,29 @@
-setuptools==65.5.0
+# Core dependencies
+setuptools==59.5.0
 wheel<0.40.0
+
+# Machine Learning & RL
 gym==0.21.0
 stable-baselines3==1.8.0
 CityLearn==2.1.2
-ipywidgets
-matplotlib
-seaborn
-shimmy
-requests
-beautifulsoup4
+
+# PyTorch and related
 torch==1.10.0+cpu
 torchvision==0.11.1+cpu
 torchaudio==0.10.0
-numpy
-pandas
-tqdm
-pyyaml
+numpy<1.24.0  # Required for gym 0.21.0 compatibility
+
+# Data processing
+pandas>=1.0.0
+pyyaml>=5.4.1
+
+# Visualization
+matplotlib>=3.3.0
+seaborn>=0.11.0
+ipywidgets>=7.6.0
+
+# Utilities
+tqdm>=4.50.0
+requests>=2.25.0
+beautifulsoup4>=4.9.0
+shimmy>=0.1.0

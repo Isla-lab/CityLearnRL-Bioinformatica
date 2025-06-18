@@ -16,7 +16,39 @@ import numpy as np
 import torch
 import json
 import time
+import warnings
+
+# Suppress specific warnings
+warnings.filterwarnings('ignore', category=UserWarning, module='gym')
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+
+# Set matplotlib to use 'Agg' to avoid display issues in headless environments
 import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from datetime import datetime
+
+# Check for required packages
+try:
+    import tensorboard
+except ImportError:
+    print("Warning: TensorBoard is not installed. Logging will be limited.")
+    TENSORBOARD_AVAILABLE = False
+else:
+    TENSORBOARD_AVAILABLE = True
+    from torch.utils.tensorboard import SummaryWriter
+
+# Configure logging
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler(os.path.join('logs', 'training.log'))
+    ]
+)
+logger = logging.getLogger(__name__)
 
 # Check for GPU availability
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -404,137 +436,6 @@ try:
         verbose=1,
         tensorboard_log=log_dir,
         **{k: v for k, v in hyperparams.items() if k in [
-            'batch_size', 'buffer_size', 'learning_starts', 'train_freq',
-            'gradient_steps', 'learning_rate', 'tau', 'gamma', 'policy_delay',
-            'target_policy_noise', 'target_noise_clip', 'tensorboard_log',
-            'policy_kwargs', 'device'
-        ]}
-    )
-    
-    print(f"Starting training for {total_training_steps} steps with batch size {batch_size}...")
-    
-    # Training loop with adaptive noise and learning rate
-    from tqdm import tqdm
-    
-    # Create progress bar
-    pbar = tqdm(total=total_training_steps, desc="Training Progress", unit="step", dynamic_ncols=True)
-    
-    # Track the last step to update progress properly
-    last_step = 0
-    
-    # Initialize variables
-    total_training_steps = 50000  # Total number of training steps
-    current_steps = 1000  # Steps per training iteration
-    warmup_steps = 10000  # Number of steps for learning rate warmup
-    save_freq = 10000  # Save model every N steps
-    
-    # Create evaluation callback
-    eval_callback = EvalCallback(
-        eval_env,
-        best_model_save_path=os.path.join(log_dir, 'best_model'),
-        log_path=log_dir,
-        eval_freq=5000,  # Evaluate every 5000 steps
-        deterministic=True,
-        render=False,
-        n_eval_episodes=1,
-    )
-    
-    # Create progress callback
-    progress_callback = ProgressCallback(check_freq=500)  # Log every 500 steps
-    
-    # Training loop
-    try:
-        while model.num_timesteps < total_training_steps:
-            # Calculate steps to train in this iteration (at most 1000 steps)
-            remaining_steps = total_training_steps - model.num_timesteps
-            current_steps = min(1000, remaining_steps)
-            
-            if current_steps <= 0:
-                break
-                
-            # Clear CUDA cache to prevent memory fragmentation
-            if torch.cuda.is_available():
-                torch.cuda.empty_cache()
-            
-            # Update action noise for this phase
-            model.action_noise = get_action_noise(model.num_timesteps, total_training_steps)
-            
-            # Apply learning rate schedule
-            if model.num_timesteps < warmup_steps:
-                # Linear warmup
-                lr_scale = model.num_timesteps / warmup_steps
-                current_lr = hyperparams['learning_rate'] * lr_scale
-            else:
-                # Keep constant learning rate after warmup
-                current_lr = hyperparams['learning_rate']
-            
-            # Apply learning rate to both actor and critic
-            for param_group in model.actor.optimizer.param_groups + model.critic.optimizer.param_groups:
-                param_group['lr'] = current_lr
-            
-            # Print progress
-            if model.num_timesteps % 1000 == 0:
-                print(f"Step {model.num_timesteps}: Learning rate = {current_lr:.2e}")
-            
-            print(f"\nTraining steps {model.num_timesteps} to {model.num_timesteps + current_steps} (of {total_training_steps})")
-            
-            # Train with callbacks
-            model.learn(
-                total_timesteps=current_steps,
-                log_interval=1000,  # Less frequent logging to reduce I/O
-                progress_bar=True,
-                tb_log_name="td3_citylearn",
-                reset_num_timesteps=False,
-                callback=[eval_callback, progress_callback]
-            )
-            
-            # Save intermediate models
-            if (model.num_timesteps % save_freq) < current_steps:  # Check if save_freq is within this batch
-                model_path = os.path.join(log_dir, f'model_step_{model.num_timesteps}')
-                model.save(model_path)
-                print(f"Model saved to {model_path}")
-            
-            # Update progress bar
-            pbar.update(model.num_timesteps - last_step)
-            last_step = model.num_timesteps
-            
-    except KeyboardInterrupt:
-        print("\nTraining interrupted by user.")
-    except Exception as e:
-        print(f"\nError during training: {e}")
-        # Save the model on error
-        model_path = os.path.join(log_dir, f'model_error_step_{model.num_timesteps}')
-        model.save(model_path)
-        print(f"Model saved to {model_path} after error")
-        raise  # Re-raise the exception after handling
-    finally:
-        pbar.close()
-        
-        # Save the final model
-        model.save(os.path.join(log_dir, 'final_model'))
-        print(f"\nFinal model saved to {os.path.join(log_dir, 'final_model')}")
-        
-        # Save training time
-        training_time = time.time() - start_time
-        print(f"\nTotal training time: {training_time:.2f} seconds")
-        
-        # Save training metrics
-        metrics = {
-            'total_training_steps': model.num_timesteps,
-            'training_time_seconds': training_time,
-            'final_learning_rate': current_lr if 'current_lr' in locals() else hyperparams['learning_rate']
-        }
-        
-        with open(os.path.join(log_dir, 'training_metrics.json'), 'w') as f:
-            json.dump(metrics, f, indent=4)
-            model_path = os.path.join(log_dir, f'model_step_{step + current_steps}')
-            model.save(model_path)
-            print(f"Model saved to {model_path}")
-except KeyboardInterrupt:
-    print("\nTraining interrupted by user.")
-finally:
-    training_time = time.time() - start_time
-    print(f"Training completed in {training_time:.2f} seconds")
 
 # Save the final model
 model.save(os.path.join(log_dir, 'final_model'))
