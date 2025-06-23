@@ -307,7 +307,7 @@ The raw CSV data backing these results is available in the `notebooks/results/` 
 
 ## Project Status
 
-Status: **Work in Progress**. This project was developed as part of a Bachelor's Thesis and is now work-in-progress. It may receive occasional maintenance for compatibility or bug fixes.
+Status: **Completed**. This project was developed as part of a Bachelor's Thesis and is now work-in-progress. It may receive occasional maintenance for compatibility or bug fixes.
 
 ---
 
